@@ -5,6 +5,7 @@ const els = {
   categoryFilter: document.getElementById("categoryFilter"),
   scoreMode: document.getElementById("scoreMode"),
   scoreValue: document.getElementById("scoreValue"),
+  sortOrder: document.getElementById("sortOrder"),
   searchInput: document.getElementById("searchInput"),
   resetBtn: document.getElementById("resetBtn"),
   results: document.getElementById("results"),
@@ -39,6 +40,7 @@ function getFilters() {
     category: els.categoryFilter.value,
     scoreMode: els.scoreMode.value,
     scoreValue: els.scoreValue.value ? parseFloat(els.scoreValue.value) : null,
+    sortOrder: els.sortOrder.value,
     search: els.searchInput.value.trim().toLowerCase(),
   };
 }
@@ -127,6 +129,18 @@ function render() {
   const filters = getFilters();
   const filtered = data.filter((item) => matchesFilters(item, filters));
 
+  if (filters.sortOrder) {
+    const dir = filters.sortOrder === "asc" ? 1 : -1;
+    filtered.sort((a, b) => {
+      const aScore = a.last_guided_total_2024;
+      const bScore = b.last_guided_total_2024;
+      if (aScore == null && bScore == null) return 0;
+      if (aScore == null) return 1;
+      if (bScore == null) return -1;
+      return (aScore - bScore) * dir;
+    });
+  }
+
   els.results.innerHTML = filtered.map(renderCard).join("");
   els.resultsCount.textContent = `عرض ${filtered.length} من ${data.length} خيار`;
   els.emptyState.hidden = filtered.length > 0;
@@ -137,6 +151,7 @@ function resetFilters() {
   els.categoryFilter.value = "";
   els.scoreMode.value = "";
   els.scoreValue.value = "";
+  els.sortOrder.value = "";
   els.searchInput.value = "";
   render();
 }
@@ -148,6 +163,7 @@ for (const el of [
   els.categoryFilter,
   els.scoreMode,
   els.scoreValue,
+  els.sortOrder,
   els.searchInput,
 ]) {
   el.addEventListener("input", render);
