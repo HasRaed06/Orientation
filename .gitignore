@@ -1,0 +1,4 @@
+node_modules/
+dist/
+data/raw-text.txt
+data/cell-text.txt
