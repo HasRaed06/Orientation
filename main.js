@@ -23,8 +23,8 @@ function initFilters() {
     els.categoryFilter.appendChild(opt);
   }
 
-  const withScore = data.filter((d) => d.last_guided_total_2024 != null);
-  const scores = withScore.map((d) => d.last_guided_total_2024);
+  const withScore = data.filter((d) => d.last_guided_total_2025 != null);
+  const scores = withScore.map((d) => d.last_guided_total_2025);
   const min = Math.min(...scores).toFixed(2);
   const max = Math.max(...scores).toFixed(2);
 
@@ -49,7 +49,7 @@ function matchesFilters(item, filters) {
   if (filters.category && item.category !== filters.category) return false;
 
   if (filters.scoreMode && filters.scoreValue != null) {
-    const score = item.last_guided_total_2024;
+    const score = item.last_guided_total_2025;
     if (score == null) return false;
     if (filters.scoreMode === "gte" && score < filters.scoreValue) return false;
     if (filters.scoreMode === "lte" && score > filters.scoreValue) return false;
@@ -75,16 +75,16 @@ function matchesFilters(item, filters) {
 
 function renderCard(item) {
   const score =
-    item.last_guided_total_2024 != null
-      ? item.last_guided_total_2024.toFixed(2)
+    item.last_guided_total_2025 != null
+      ? item.last_guided_total_2025.toFixed(2)
       : item.last_guided_display || "—";
 
   const scoreClass =
-    item.last_guided_total_2024 == null
+    item.last_guided_total_2025 == null
       ? "score score-muted"
-      : item.last_guided_total_2024 >= 110
+      : item.last_guided_total_2025 >= 110
         ? "score score-high"
-        : item.last_guided_total_2024 >= 95
+        : item.last_guided_total_2025 >= 95
           ? "score score-mid"
           : "score";
 
@@ -116,10 +116,6 @@ function renderCard(item) {
           <dt>صيغة احتساب المجموع</dt>
           <dd><code>${item.score_formula || "—"}</code></dd>
         </div>
-        <div>
-          <dt>طاقة الاستيعاب</dt>
-          <dd>${item.capacity}</dd>
-        </div>
       </dl>
     </article>
   `;
@@ -132,8 +128,8 @@ function render() {
   if (filters.sortOrder) {
     const dir = filters.sortOrder === "asc" ? 1 : -1;
     filtered.sort((a, b) => {
-      const aScore = a.last_guided_total_2024;
-      const bScore = b.last_guided_total_2024;
+      const aScore = a.last_guided_total_2025;
+      const bScore = b.last_guided_total_2025;
       if (aScore == null && bScore == null) return 0;
       if (aScore == null) return 1;
       if (bScore == null) return -1;
