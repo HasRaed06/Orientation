@@ -4,7 +4,9 @@
 
 Vanilla HTML/CSS/JS app (no framework). Vite bundler. Capacitor for Android.
 
-- `main.js` — SPA entrypoint (`type="module"` script in `index.html`)
+- `bac-selector.html` — Bac type chooser page (standalone, inlined CSS), links to `index.html?bac=id`
+- `index.html` — Main app page, reads `?bac=` from URL to load the matching JSON
+- `main.js` — App logic (`type="module"` script in `index.html`)
 - `public/data/orientations_*.json` — Per-bac type data files (7 types: eco, info, let, math, sci, sp, tech), also mirrored in `data/`
 - `scripts/extract-pdf.mjs` — Parses `d:\Downloads\guide_2025_tp.pdf` → `data/orientations.json`
 - `styles.css` — RTL Arabic design system
@@ -20,7 +22,7 @@ Vanilla HTML/CSS/JS app (no framework). Vite bundler. Capacitor for Android.
 
 ## Data loading
 
-`main.js` no longer imports `orientations.json` statically. On load, it shows a bac type selection screen (7 types). When the user picks one, it fetches the corresponding `data/orientations_*.json` file via `fetch()` and renders the main screen with that data.
+`main.js` no longer imports `orientations.json` statically. On load, it reads `?bac=` from URL, fetches the corresponding `data/orientations_*.json` via `fetch()` and renders the main screen. If no `?bac=` param is present, it redirects to `bac-selector.html`.
 
 The per-bac JSON files use `last_guided_total_2025` (not `2024`).
 

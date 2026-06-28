@@ -1,17 +1,22 @@
-const BAC_TYPES = [
-  { id: "math", label: "رياضيات", file: "orientations_math.json" },
-  { id: "sci", label: "علوم تجريبية", file: "orientations_sci.json" },
-  { id: "eco", label: "اقتصاد وتصرف", file: "orientations_eco.json" },
-  { id: "let", label: "آداب", file: "orientations_let.json" },
-  { id: "info", label: "علوم الإعلامية", file: "orientations_info.json" },
-  { id: "tech", label: "علوم التقنية", file: "orientations_tech.json" },
-  { id: "sp", label: "رياضة", file: "orientations_sp.json" },
+﻿const BAC_TYPES = [
+  { id: "math", label: "\u0631\u064A\u0627\u0636\u064A\u0627\u062A", file: "orientations_math.json" },
+  { id: "sci", label: "\u0639\u0644\u0648\u0645 \u062A\u062C\u0631\u064A\u0628\u064A\u0629", file: "orientations_sci.json" },
+  { id: "eco", label: "\u0627\u0642\u062A\u0635\u0627\u062F \u0648\u062A\u0635\u0631\u0641", file: "orientations_eco.json" },
+  { id: "let", label: "\u0622\u062F\u0627\u0628", file: "orientations_let.json" },
+  { id: "info", label: "\u0639\u0644\u0648\u0645 \u0627\u0644\u0625\u0639\u0644\u0627\u0645\u064A\u0629", file: "orientations_info.json" },
+  { id: "tech", label: "\u0639\u0644\u0648\u0645 \u0627\u0644\u062A\u0642\u0646\u064A\u0629", file: "orientations_tech.json" },
+  { id: "sp", label: "\u0631\u064A\u0627\u0636\u0629", file: "orientations_sp.json" },
 ];
 
+const params = new URLSearchParams(location.search);
+const bacId = params.get("bac");
+
+const bac = BAC_TYPES.find((b) => b.id === bacId);
+if (!bac) {
+  location.replace("bac-selector.html");
+}
+
 const els = {
-  bacSelector: document.getElementById("bacSelector"),
-  bacGrid: document.getElementById("bacGrid"),
-  app: document.getElementById("app"),
   appTitle: document.getElementById("appTitle"),
   stats: document.getElementById("stats"),
   categoryFilter: document.getElementById("categoryFilter"),
@@ -20,7 +25,6 @@ const els = {
   sortOrder: document.getElementById("sortOrder"),
   searchInput: document.getElementById("searchInput"),
   resetBtn: document.getElementById("resetBtn"),
-  backBtn: document.getElementById("backBtn"),
   results: document.getElementById("results"),
   resultsCount: document.getElementById("resultsCount"),
   emptyState: document.getElementById("emptyState"),
@@ -28,40 +32,26 @@ const els = {
 
 let data = [];
 
-function renderBacGrid() {
-  els.bacGrid.innerHTML = BAC_TYPES
-    .map(
-      (bac) => `
-    <button class="card bac-card" data-id="${bac.id}">
-      <span class="bac-label">${bac.label}</span>
-    </button>`
-    )
-    .join("");
-}
-
-async function onBacSelected(id) {
-  const bac = BAC_TYPES.find((b) => b.id === id);
-  if (!bac) return;
-
+(async function init() {
   try {
-    const resp = await fetch(`./data/${bac.file}`);
+    const resp = await fetch("./data/" + bac.file);
     data = await resp.json();
   } catch {
-    alert("فشل تحميل البيانات. تأكد من وجود الملف.");
+    alert("\u0641\u0634\u0644 \u062A\u062D\u0645\u064A\u0644 \u0627\u0644\u0628\u064A\u0627\u0646\u0627\u062A. \u062A\u0623\u0643\u062F \u0645\u0646 \u0648\u062C\u0648\u062F \u0627\u0644\u0645\u0644\u0641.");
+    location.replace("bac-selector.html");
     return;
   }
 
-  els.bacSelector.hidden = true;
-  els.app.hidden = false;
-  els.appTitle.textContent = `خيارات التوجيه — بكالوريا ${bac.label}`;
+  document.title = "\u062E\u064A\u0627\u0631\u0627\u062A \u0627\u0644\u062A\u0648\u062C\u064A\u0647 \u2014 \u0628\u0643\u0627\u0644\u0648\u0631\u064A\u0627 " + bac.label;
+  els.appTitle.textContent = "\u062E\u064A\u0627\u0631\u0627\u062A \u0627\u0644\u062A\u0648\u062C\u064A\u0647 \u2014 \u0628\u0643\u0627\u0644\u0648\u0631\u064A\u0627 " + bac.label;
   initFilters();
   render();
   bindEvents();
-}
+})();
 
 function initFilters() {
   const categories = [...new Set(data.map((d) => d.category))].sort();
-  els.categoryFilter.innerHTML = '<option value="">كل القطاعات</option>';
+  els.categoryFilter.innerHTML = '<option value="">\u0643\u0644 \u0627\u0644\u0642\u0637\u0627\u0639\u0627\u062A</option>';
   for (const cat of categories) {
     const opt = document.createElement("option");
     opt.value = cat;
@@ -71,14 +61,14 @@ function initFilters() {
 
   const withScore = data.filter((d) => d.last_guided_total_2025 != null);
   const scores = withScore.map((d) => d.last_guided_total_2025);
-  const min = scores.length ? Math.min(...scores).toFixed(2) : "—";
-  const max = scores.length ? Math.max(...scores).toFixed(2) : "—";
+  const min = scores.length ? Math.min(...scores).toFixed(2) : "\u2014";
+  const max = scores.length ? Math.max(...scores).toFixed(2) : "\u2014";
 
-  els.stats.innerHTML = `
-    <div class="stat"><strong>${data.length}</strong><span>خيار</span></div>
-    <div class="stat"><strong>${categories.length}</strong><span>قطاع</span></div>
-    <div class="stat"><strong>${min} – ${max}</strong><span>نطاق المجاميع</span></div>
-  `;
+  els.stats.innerHTML = [
+    '<div class="stat"><strong>' + data.length + '</strong><span>\u062E\u064A\u0627\u0631</span></div>',
+    '<div class="stat"><strong>' + categories.length + '</strong><span>\u0642\u0637\u0627\u0639</span></div>',
+    '<div class="stat"><strong>' + min + ' \u2013 ' + max + '</strong><span>\u0646\u0637\u0627\u0642 \u0627\u0644\u0645\u062C\u0627\u0645\u064A\u0639</span></div>',
+  ].join("");
 }
 
 function getFilters() {
@@ -123,7 +113,7 @@ function renderCard(item) {
   const score =
     item.last_guided_total_2025 != null
       ? item.last_guided_total_2025.toFixed(2)
-      : item.last_guided_display || "—";
+      : item.last_guided_display || "\u2014";
 
   const scoreClass =
     item.last_guided_total_2025 == null
@@ -134,37 +124,22 @@ function renderCard(item) {
           ? "score score-mid"
           : "score";
 
-  return `
-    <article class="card orientation-card">
-      <div class="card-top">
-        <span class="badge">${item.category}</span>
-        <span class="${scoreClass}" title="مجموع آخر موجه 2025">${score}</span>
-      </div>
-      <h3 class="institution">${item.institution || "—"}</h3>
-      <dl class="details">
-        <div>
-          <dt>الإجازة / الشعبة</dt>
-          <dd>${item.degree || "—"}</dd>
-        </div>
-        <div>
-          <dt>التخصص</dt>
-          <dd>${item.specialization || "—"}</dd>
-        </div>
-        <div>
-          <dt>صفحة الدليل</dt>
-          <dd>${item.page ?? "—"}</dd>
-        </div>
-        <div>
-          <dt>الرمز</dt>
-          <dd><code>${item.code}</code></dd>
-        </div>
-        <div>
-          <dt>صيغة احتساب المجموع</dt>
-          <dd><code>${item.score_formula || "—"}</code></dd>
-        </div>
-      </dl>
-    </article>
-  `;
+  return [
+    '<article class="card orientation-card">',
+    '  <div class="card-top">',
+    '    <span class="badge">' + item.category + '</span>',
+    '    <span class="' + scoreClass + '" title="\u0645\u062C\u0645\u0648\u0639 \u0622\u062E\u0631 \u0645\u0648\u062C\u0647 2025">' + score + '</span>',
+    '  </div>',
+    '  <h3 class="institution">' + (item.institution || "\u2014") + '</h3>',
+    '  <dl class="details">',
+    '    <div><dt>\u0627\u0644\u0625\u062C\u0627\u0632\u0629 / \u0627\u0644\u0634\u0639\u0628\u0629</dt><dd>' + (item.degree || "\u2014") + '</dd></div>',
+    '    <div><dt>\u0627\u0644\u062A\u062E\u0635\u0635</dt><dd>' + (item.specialization || "\u2014") + '</dd></div>',
+    '    <div><dt>\u0635\u0641\u062D\u0629 \u0627\u0644\u062F\u0644\u064A\u0644</dt><dd>' + (item.page ?? "\u2014") + '</dd></div>',
+    '    <div><dt>\u0627\u0644\u0631\u0645\u0632</dt><dd><code>' + item.code + '</code></dd></div>',
+    '    <div><dt>\u0635\u064A\u063A\u0629 \u0627\u062D\u062A\u0633\u0627\u0628 \u0627\u0644\u0645\u062C\u0645\u0648\u0639</dt><dd><code>' + (item.score_formula || "\u2014") + '</code></dd></div>',
+    '  </dl>',
+    '</article>',
+  ].join("\n");
 }
 
 function render() {
@@ -184,7 +159,7 @@ function render() {
   }
 
   els.results.innerHTML = filtered.map(renderCard).join("");
-  els.resultsCount.textContent = `عرض ${filtered.length} من ${data.length} خيار`;
+  els.resultsCount.textContent = "\u0639\u0631\u0636 " + filtered.length + " \u0645\u0646 " + data.length + " \u062E\u064A\u0627\u0631";
   els.emptyState.hidden = filtered.length > 0;
   els.results.hidden = filtered.length === 0;
 }
@@ -198,12 +173,6 @@ function resetFilters() {
   render();
 }
 
-function goBack() {
-  els.app.hidden = true;
-  els.bacSelector.hidden = false;
-  data = [];
-}
-
 function bindEvents() {
   for (const el of [
     els.categoryFilter,
@@ -212,19 +181,9 @@ function bindEvents() {
     els.sortOrder,
     els.searchInput,
   ]) {
-    el.removeEventListener("input", render);
-    el.removeEventListener("change", render);
     el.addEventListener("input", render);
     el.addEventListener("change", render);
   }
 }
 
-renderBacGrid();
-
-els.bacGrid.addEventListener("click", (e) => {
-  const card = e.target.closest(".bac-card");
-  if (card) onBacSelected(card.dataset.id);
-});
-
 els.resetBtn.addEventListener("click", resetFilters);
-els.backBtn.addEventListener("click", goBack);
