@@ -268,6 +268,68 @@ code {
   font-size: 0.9rem;
 }
 
+.bac-selector {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+.bac-selector h1 {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.bac-selector .subtitle {
+  text-align: center;
+  margin: 0 auto 2rem;
+}
+
+.bac-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.bac-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  font: inherit;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: var(--shadow);
+}
+
+.bac-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 10px 30px rgba(15, 76, 92, 0.18);
+}
+
+.bac-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btn-back {
+  background: var(--surface);
+  color: var(--accent);
+  font-weight: 600;
+  border: 1px solid var(--border);
+  margin-right: 0.5rem;
+}
+
+.btn-back:hover {
+  border-color: var(--accent);
+}
+
 @media (max-width: 640px) {
   .header-inner,
   .results-header {

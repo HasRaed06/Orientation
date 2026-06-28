@@ -1,6 +1,18 @@
-import data from "./data/orientations.json";
+const BAC_TYPES = [
+  { id: "math", label: "رياضيات", file: "orientations_math.json" },
+  { id: "sci", label: "علوم تجريبية", file: "orientations_sci.json" },
+  { id: "eco", label: "اقتصاد وتصرف", file: "orientations_eco.json" },
+  { id: "let", label: "آداب", file: "orientations_let.json" },
+  { id: "info", label: "علوم الإعلامية", file: "orientations_info.json" },
+  { id: "tech", label: "علوم التقنية", file: "orientations_tech.json" },
+  { id: "sp", label: "رياضة", file: "orientations_sp.json" },
+];
 
 const els = {
+  bacSelector: document.getElementById("bacSelector"),
+  bacGrid: document.getElementById("bacGrid"),
+  app: document.getElementById("app"),
+  appTitle: document.getElementById("appTitle"),
   stats: document.getElementById("stats"),
   categoryFilter: document.getElementById("categoryFilter"),
   scoreMode: document.getElementById("scoreMode"),
@@ -8,14 +20,48 @@ const els = {
   sortOrder: document.getElementById("sortOrder"),
   searchInput: document.getElementById("searchInput"),
   resetBtn: document.getElementById("resetBtn"),
+  backBtn: document.getElementById("backBtn"),
   results: document.getElementById("results"),
   resultsCount: document.getElementById("resultsCount"),
   emptyState: document.getElementById("emptyState"),
 };
 
-const categories = [...new Set(data.map((d) => d.category))].sort();
+let data = [];
+
+function renderBacGrid() {
+  els.bacGrid.innerHTML = BAC_TYPES
+    .map(
+      (bac) => `
+    <button class="card bac-card" data-id="${bac.id}">
+      <span class="bac-label">${bac.label}</span>
+    </button>`
+    )
+    .join("");
+}
+
+async function onBacSelected(id) {
+  const bac = BAC_TYPES.find((b) => b.id === id);
+  if (!bac) return;
+
+  try {
+    const resp = await fetch(`./data/${bac.file}`);
+    data = await resp.json();
+  } catch {
+    alert("فشل تحميل البيانات. تأكد من وجود الملف.");
+    return;
+  }
+
+  els.bacSelector.hidden = true;
+  els.app.hidden = false;
+  els.appTitle.textContent = `خيارات التوجيه — بكالوريا ${bac.label}`;
+  initFilters();
+  render();
+  bindEvents();
+}
 
 function initFilters() {
+  const categories = [...new Set(data.map((d) => d.category))].sort();
+  els.categoryFilter.innerHTML = '<option value="">كل القطاعات</option>';
   for (const cat of categories) {
     const opt = document.createElement("option");
     opt.value = cat;
@@ -25,8 +71,8 @@ function initFilters() {
 
   const withScore = data.filter((d) => d.last_guided_total_2025 != null);
   const scores = withScore.map((d) => d.last_guided_total_2025);
-  const min = Math.min(...scores).toFixed(2);
-  const max = Math.max(...scores).toFixed(2);
+  const min = scores.length ? Math.min(...scores).toFixed(2) : "—";
+  const max = scores.length ? Math.max(...scores).toFixed(2) : "—";
 
   els.stats.innerHTML = `
     <div class="stat"><strong>${data.length}</strong><span>خيار</span></div>
@@ -92,7 +138,7 @@ function renderCard(item) {
     <article class="card orientation-card">
       <div class="card-top">
         <span class="badge">${item.category}</span>
-        <span class="${scoreClass}" title="مجموع آخر موجه 2024">${score}</span>
+        <span class="${scoreClass}" title="مجموع آخر موجه 2025">${score}</span>
       </div>
       <h3 class="institution">${item.institution || "—"}</h3>
       <dl class="details">
@@ -152,18 +198,33 @@ function resetFilters() {
   render();
 }
 
-initFilters();
-render();
-
-for (const el of [
-  els.categoryFilter,
-  els.scoreMode,
-  els.scoreValue,
-  els.sortOrder,
-  els.searchInput,
-]) {
-  el.addEventListener("input", render);
-  el.addEventListener("change", render);
+function goBack() {
+  els.app.hidden = true;
+  els.bacSelector.hidden = false;
+  data = [];
 }
 
+function bindEvents() {
+  for (const el of [
+    els.categoryFilter,
+    els.scoreMode,
+    els.scoreValue,
+    els.sortOrder,
+    els.searchInput,
+  ]) {
+    el.removeEventListener("input", render);
+    el.removeEventListener("change", render);
+    el.addEventListener("input", render);
+    el.addEventListener("change", render);
+  }
+}
+
+renderBacGrid();
+
+els.bacGrid.addEventListener("click", (e) => {
+  const card = e.target.closest(".bac-card");
+  if (card) onBacSelected(card.dataset.id);
+});
+
 els.resetBtn.addEventListener("click", resetFilters);
+els.backBtn.addEventListener("click", goBack);

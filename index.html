@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>دليل التوجيه — علوم الإعلامية</title>
+    <title>دليل التوجيه الجامعي 2025</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,85 +13,96 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <header class="header">
-      <div class="container header-inner">
-        <div>
-          <p class="eyebrow">دورة التوجيه الجامعي 2025</p>
-          <h1>خيارات التوجيه — بكالوريا علوم الإعلامية</h1>
-          <p class="subtitle">
-            جميع الخيارات المستخرجة من دليل طاقة الاستيعاب مع إمكانية التصفية حسب
-            المجموع والقطاع.
-          </p>
-        </div>
-        <div class="stats" id="stats"></div>
-      </div>
-    </header>
-
-    <main class="container">
-      <section class="filters card">
-        <h2>تصفية النتائج</h2>
-        <div class="filters-grid">
-          <label class="field">
-            <span>القطاع / العنوان الرئيسي</span>
-            <select id="categoryFilter">
-              <option value="">كل القطاعات</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span>مجموع آخر موجه 2024</span>
-            <select id="scoreMode">
-              <option value="">بدون تصفية بالمجموع</option>
-              <option value="gte">أكبر من أو يساوي</option>
-              <option value="lte">أصغر من أو يساوي</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span>قيمة المجموع</span>
-            <input
-              type="number"
-              id="scoreValue"
-              placeholder="مثال: 100"
-              step="0.01"
-              min="0"
-              max="200"
-            />
-          </label>
-
-          <label class="field">
-            <span>ترتيب حسب مجموع آخر موجه 2024</span>
-            <select id="sortOrder">
-              <option value="">بدون ترتيب</option>
-              <option value="asc">تصاعدي (من الأصغر إلى الأكبر)</option>
-              <option value="desc">تنازلي (من الأكبر إلى الأصغر)</option>
-            </select>
-          </label>
-
-          <label class="field field-wide">
-            <span>بحث (مؤسسة، إجازة، تخصص...)</span>
-            <input type="search" id="searchInput" placeholder="ابحث..." />
-          </label>
-        </div>
-        <div class="filter-actions">
-          <button type="button" class="btn btn-ghost" id="resetBtn">إعادة الضبط</button>
-        </div>
-      </section>
-
-      <section class="results-header">
-        <h2>الخيارات المتاحة</h2>
-        <p id="resultsCount"></p>
-      </section>
-
-      <div id="results" class="results-grid"></div>
-      <p id="emptyState" class="empty-state" hidden>لا توجد نتائج مطابقة للتصفية.</p>
-    </main>
-
-    <footer class="footer">
+    <section id="bacSelector" class="bac-selector">
       <div class="container">
-        <p>البيانات مستخرجة من دليل طاقة الاستيعاب 2025 — بكالوريا تونسية</p>
+        <h1>اختر شعبة البكالوريا</h1>
+        <p class="subtitle">اختر شعبتك لاستعراض خيارات التوجيه الجامعي المتاحة</p>
+        <div id="bacGrid" class="bac-grid"></div>
       </div>
-    </footer>
+    </section>
+
+    <section id="app" hidden>
+      <header class="header">
+        <div class="container header-inner">
+          <div>
+            <p class="eyebrow">دورة التوجيه الجامعي 2025</p>
+            <h1 id="appTitle">خيارات التوجيه</h1>
+            <p class="subtitle">
+              جميع الخيارات المستخرجة من دليل طاقة الاستيعاب مع إمكانية التصفية حسب
+              المجموع والقطاع.
+            </p>
+          </div>
+          <div class="stats" id="stats"></div>
+        </div>
+      </header>
+
+      <main class="container">
+        <section class="filters card">
+          <h2>تصفية النتائج</h2>
+          <div class="filters-grid">
+            <label class="field">
+              <span>القطاع / العنوان الرئيسي</span>
+              <select id="categoryFilter">
+                <option value="">كل القطاعات</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>مجموع آخر موجه 2025</span>
+              <select id="scoreMode">
+                <option value="">بدون تصفية بالمجموع</option>
+                <option value="gte">أكبر من أو يساوي</option>
+                <option value="lte">أصغر من أو يساوي</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>قيمة المجموع</span>
+              <input
+                type="number"
+                id="scoreValue"
+                placeholder="مثال: 100"
+                step="0.01"
+                min="0"
+                max="200"
+              />
+            </label>
+
+            <label class="field">
+              <span>ترتيب حسب مجموع آخر موجه 2025</span>
+              <select id="sortOrder">
+                <option value="">بدون ترتيب</option>
+                <option value="asc">تصاعدي (من الأصغر إلى الأكبر)</option>
+                <option value="desc">تنازلي (من الأكبر إلى الأصغر)</option>
+              </select>
+            </label>
+
+            <label class="field field-wide">
+              <span>بحث (مؤسسة، إجازة، تخصص...)</span>
+              <input type="search" id="searchInput" placeholder="ابحث..." />
+            </label>
+          </div>
+          <div class="filter-actions">
+            <button type="button" class="btn btn-ghost" id="resetBtn">إعادة الضبط</button>
+            <button type="button" class="btn btn-back" id="backBtn">تغيير الشعبة</button>
+          </div>
+        </section>
+
+        <section class="results-header">
+          <h2>الخيارات المتاحة</h2>
+          <p id="resultsCount"></p>
+        </section>
+
+        <div id="results" class="results-grid"></div>
+        <p id="emptyState" class="empty-state" hidden>لا توجد نتائج مطابقة للتصفية.</p>
+      </main>
+
+      <footer class="footer">
+        <div class="container">
+          <p>البيانات مستخرجة من دليل طاقة الاستيعاب 2025 — بكالوريا تونسية</p>
+        </div>
+      </footer>
+    </section>
 
     <script type="module" src="/main.js"></script>
   </body>
