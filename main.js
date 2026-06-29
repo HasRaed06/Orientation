@@ -24,6 +24,7 @@ const els = {
   scoreValue: document.getElementById("scoreValue"),
   sortOrder: document.getElementById("sortOrder"),
   searchInput: document.getElementById("searchInput"),
+  filterBtn: document.getElementById("filterBtn"),
   resetBtn: document.getElementById("resetBtn"),
   results: document.getElementById("results"),
   resultsCount: document.getElementById("resultsCount"),
@@ -174,16 +175,6 @@ function resetFilters() {
 }
 
 function bindEvents() {
-  for (const el of [
-    els.categoryFilter,
-    els.scoreMode,
-    els.scoreValue,
-    els.sortOrder,
-    els.searchInput,
-  ]) {
-    el.addEventListener("input", render);
-    el.addEventListener("change", render);
-  }
+  els.filterBtn.addEventListener("click", render);
+  els.resetBtn.addEventListener("click", resetFilters);
 }
-
-els.resetBtn.addEventListener("click", resetFilters);
