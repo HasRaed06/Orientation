@@ -48,6 +48,19 @@ let data = [];
   initFilters();
   render();
   bindEvents();
+
+  try {
+    const { AdMob } = Capacitor.Plugins;
+    await AdMob.initialize({});
+    await AdMob.showBanner({
+      adId: "ca-app-pub-3940256099942544/6300978111",
+      isTesting: true,
+      position: "BOTTOM_CENTER",
+      adSize: "BANNER",
+    });
+  } catch {
+    // Capacitor not available (browser dev), skip ads
+  }
 })();
 
 function initFilters() {

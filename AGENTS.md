@@ -1,35 +1,39 @@
-# AGENTS.md — Orientation Guide
+# AGENTS.md — Orientation guide
 
-## Project structure
+Vanilla HTML/CSS/JS app (no framework). Vite bundler, Capacitor for Android.
 
-Vanilla HTML/CSS/JS app (no framework). Vite bundler. Capacitor for Android.
+## Structure
 
-- `bac-selector.html` — Bac type chooser page (standalone, inlined CSS), links to `index.html?bac=id`
-- `index.html` — Main app page, reads `?bac=` from URL to load the matching JSON
-- `main.js` — App logic (`type="module"` script in `index.html`)
-- `public/data/orientations_*.json` — Per-bac type data files (7 types: eco, info, let, math, sci, sp, tech), also mirrored in `data/`
-- `scripts/extract-pdf.mjs` — Parses `d:\Downloads\guide_2025_tp.pdf` → `data/orientations.json`
-- `styles.css` — RTL Arabic design system
+- `bac-selector.html` — standalone page in `public/` (inlined CSS), links to `index.html?bac=id`
+- `index.html` + `main.js` — main app (ES module), reads `?bac=` param, fetches matching JSON
+- `public/data/orientations_*.json` — 7 per-bac data files (eco, info, let, math, sci, sp, tech), mirrored in `data/`
+- `src/` — React/TS components (SearchFeed, injectAd). Standalone; NOT imported by the main app
+- `scripts/extract-pdf.mjs` — parses a hardcoded PDF, outputs `data/orientations.json`. Extracts only for bac `علوم الإعلامية` (`BAC_MEDIA` at line 10). Writes `last_guided_total_2024` field. The per-bac split + rename to `2025` is done offline (not in the repo)
 
 ## Commands
 
 | Command | Action |
 |---------|--------|
-| `npm run dev` | Start Vite dev server |
+| `npm run dev` | Vite dev server |
 | `npm run build` | Build to `dist/` |
 | `npm run preview` | Preview production build |
-| `npm run extract` | Run PDF extraction — hardcoded PDF path at `extract-pdf.mjs:7`, outputs `data/orientations.json`. Only extracts for bac type `علوم الإعلامية` (defined at `extract-pdf.mjs:10`). |
+| `npm run extract` | PDF extraction (hardcoded path `extract-pdf.mjs:7`) |
+| `npx tsc --noEmit` | Type-check `src/` |
 
 ## Data loading
 
-`main.js` no longer imports `orientations.json` statically. On load, it reads `?bac=` from URL, fetches the corresponding `data/orientations_*.json` via `fetch()` and renders the main screen. If no `?bac=` param is present, it redirects to `bac-selector.html`.
-
-The per-bac JSON files use `last_guided_total_2025` (not `2024`).
+`main.js` reads `?bac=` from URL, fetches `data/orientations_<bac>.json` via `fetch()`. No param → redirects to `bac-selector.html`. Per-bac JSON uses `last_guided_total_2025`.
 
 ## Conventions
 
-- Arabic content only, RTL layout (`dir="rtl"` on `<html>`)
-- No tests, no lint, no CI/CD, no typechecking
-- `base: "./"` in Vite config (relative asset paths for Capacitor/Cordova)
-- No `public/` directory currently exists (vite config expects one)
-- `capacitor.config.ts` → `webDir: 'dist'`, app ID `com.raed.orientation`
+- Arabic only, `dir="rtl"` on `<html>`
+- `base: "./"` in Vite config (relative paths for Capacitor)
+- `capacitor.config.ts`: app ID `com.raed.orientation`, `webDir: 'dist'`
+- No tests, no lint, no CI/CD
+- React TS components use kebab-case BEM CSS (e.g. `feed-card__title`)
+
+## React / AdMob
+
+- `SearchFeed` renders a feed with an ad spliced at index 3 (`injectAd.ts`)
+- Ad uses `@capacitor-community/admob` with Google test banner ad unit ID
+- On load failure `AdCard` returns `null`; cleanup calls `AdMob.removeBanner()`
