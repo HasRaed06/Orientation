@@ -2,13 +2,15 @@
 
 Vanilla HTML/CSS/JS app (no framework). Vite bundler, Capacitor for Android.
 
-## Structure
+## Architecture
 
 - `bac-selector.html` — standalone page in `public/` (inlined CSS), links to `index.html?bac=id`
-- `index.html` + `main.js` — main app (ES module), reads `?bac=` param, fetches matching JSON
+- `index.html` + `main.js` — main app (ES module), reads `?bac=` param, fetches matching per-bac JSON. AdMob via global `Capacitor.Plugins.AdMob` (try/catch, silently skips in browser dev)
+- `styles.css` — at root, loaded as `/styles.css` from `index.html` only (bac-selector has inlined CSS)
 - `public/data/orientations_*.json` — 7 per-bac data files (eco, info, let, math, sci, sp, tech), mirrored in `data/`
-- `src/` — React/TS components (SearchFeed, injectAd). Standalone; NOT imported by the main app
-- `scripts/extract-pdf.mjs` — parses a hardcoded PDF, outputs `data/orientations.json`. Extracts only for bac `علوم الإعلامية` (`BAC_MEDIA` at line 10). Writes `last_guided_total_2024` field. The per-bac split + rename to `2025` is done offline (not in the repo)
+- `data/backup.ini` — raw extract output (unused by app). `data/raw-text.txt` and `data/cell-text.txt` are gitignored artifacts
+- `scripts/extract-pdf.mjs` — parses hardcoded PDF at `d:\\Downloads\\guide_2025_tp.pdf`, outputs `data/orientations.json`. Only extracts for bac `علوم الإعلامية`. Has `last_guided_total_2024` field; per-bac split + rename to `2025` is done offline (not in repo)
+
 
 ## Commands
 
@@ -17,12 +19,11 @@ Vanilla HTML/CSS/JS app (no framework). Vite bundler, Capacitor for Android.
 | `npm run dev` | Vite dev server |
 | `npm run build` | Build to `dist/` |
 | `npm run preview` | Preview production build |
-| `npm run extract` | PDF extraction (hardcoded path `extract-pdf.mjs:7`) |
-| `npx tsc --noEmit` | Type-check `src/` |
+| `npm run extract` | PDF extraction (hardcoded path in `extract-pdf.mjs`) |
 
-## Data loading
+## Data
 
-`main.js` reads `?bac=` from URL, fetches `data/orientations_<bac>.json` via `fetch()`. No param → redirects to `bac-selector.html`. Per-bac JSON uses `last_guided_total_2025`.
+`main.js` reads `?bac=` from URL, fetches `data/orientations_<bac>.json` via `fetch()`. No param → redirects to `bac-selector.html`. JSON uses field `last_guided_total_2025`.
 
 ## Conventions
 
@@ -30,10 +31,4 @@ Vanilla HTML/CSS/JS app (no framework). Vite bundler, Capacitor for Android.
 - `base: "./"` in Vite config (relative paths for Capacitor)
 - `capacitor.config.ts`: app ID `com.raed.orientation`, `webDir: 'dist'`
 - No tests, no lint, no CI/CD
-- React TS components use kebab-case BEM CSS (e.g. `feed-card__title`)
-
-## React / AdMob
-
-- `SearchFeed` renders a feed with an ad spliced at index 3 (`injectAd.ts`)
-- Ad uses `@capacitor-community/admob` with Google test banner ad unit ID
-- On load failure `AdCard` returns `null`; cleanup calls `AdMob.removeBanner()`
+- Google test banner ad unit ID `ca-app-pub-3940256099942544/6300978111`
