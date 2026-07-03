@@ -56,7 +56,7 @@ let data = [];
       adId: "ca-app-pub-3940256099942544/6300978111",
       isTesting: true,
       position: "BOTTOM_CENTER",
-      adSize: "BANNER",
+      adSize: "ADAPTIVE_BANNER",
     });
   } catch {
     // Capacitor not available (browser dev), skip ads

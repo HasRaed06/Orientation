@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>اختيار الشعبة — دليل التوجيه الجامعي 2025</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -22,7 +22,8 @@
         --shadow: 0 10px 30px rgba(15, 76, 92, 0.08);
         --radius: 16px;
       }
-      * { box-sizing: border-box; }
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      html { touch-action: manipulation; }
       body {
         margin: 0;
         font-family: "IBM Plex Sans Arabic", sans-serif;
@@ -38,7 +39,7 @@
         display: flex;
         align-items: center;
         min-height: 100vh;
-        padding: 2rem 0;
+        padding: calc(env(safe-area-inset-top) + 2rem) env(safe-area-inset-right) calc(env(safe-area-inset-bottom) + 2rem) env(safe-area-inset-left);
       }
       .bac-selector h1 {
         margin: 0 0 0.5rem;

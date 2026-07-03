@@ -30,8 +30,9 @@ Vanilla HTML/CSS/JS app (no framework). Vite bundler, Capacitor for Android.
 
 - `"type": "module"` in package.json — all `.js` and `.mjs` files run as ESM
 - `base: "./"` in Vite config (relative paths for Capacitor)
-- `capacitor.config.ts`: app ID `com.raed.orientation`, `webDir: 'dist'` — the only TypeScript file in the repo
-- `android/` is Capacitor-managed (regenerated via `npx cap sync`); do not hand-edit
+- `capacitor.config.ts`: app ID `com.raed.orientation`, `webDir: 'dist'`
+- `android/` is Capacitor-managed except for `AndroidManifest.xml:19` (`windowSoftInputMode="adjustPan"` — keeps AdMob banner at screen bottom when keyboard opens)
 - Google test banner: `ca-app-pub-3940256099942544/6300978111`
+- TypeScript is a devDep only (for `capacitor.config.ts` parsing)
 - No tests, no lint, no CI/CD
 - Only `scripts/` is codegen and debugging; everything else powers the app
