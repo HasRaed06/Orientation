@@ -348,6 +348,39 @@ code {
   border-color: var(--accent);
 }
 
+.scroll-to-top {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 80px);
+  left: 1.25rem;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(15, 76, 92, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s, visibility 0.25s, transform 0.25s;
+  transform: translateY(8px);
+  z-index: 100;
+  touch-action: manipulation;
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+  background: #0a3d4a;
+}
+
 @media (max-width: 640px) {
   .header-inner,
   .results-header {

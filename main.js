@@ -191,3 +191,16 @@ function bindEvents() {
   els.filterBtn.addEventListener("click", render);
   els.resetBtn.addEventListener("click", resetFilters);
 }
+
+const scrollBtn = document.getElementById("scrollToTopBtn");
+const filtersSection = document.querySelector(".filters");
+
+function handleScroll() {
+  scrollBtn.classList.toggle("visible", filtersSection.getBoundingClientRect().bottom <= 0);
+}
+
+scrollBtn.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+window.addEventListener("scroll", handleScroll, { passive: true });
