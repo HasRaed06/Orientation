@@ -148,6 +148,9 @@ select:focus {
 
 .filter-actions {
   margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .btn {
@@ -156,6 +159,13 @@ select:focus {
   padding: 0.65rem 1rem;
   font: inherit;
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
 }
 
 .btn-ghost {
@@ -326,11 +336,12 @@ code {
 }
 
 .btn-back {
+  display: inline-flex;
+  align-items: center;
   background: var(--surface);
   color: var(--accent);
   font-weight: 600;
   border: 1px solid var(--border);
-  margin-right: 0.5rem;
 }
 
 .btn-back:hover {
