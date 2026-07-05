@@ -119,6 +119,7 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  justify-content: space-between;
 }
 
 .field-wide {
@@ -149,7 +150,6 @@ select:focus {
 .filter-actions {
   margin-top: 1rem;
   display: flex;
-  flex-wrap: wrap;
   gap: 0.5rem;
 }
 
@@ -410,13 +410,9 @@ code {
     padding: 0.7rem;
   }
 
-  .filter-actions {
-    flex-direction: column;
-  }
-
   .filter-actions .btn {
     text-align: center;
-    width: 100%;
+    flex: 1;
   }
 
   .results-grid {

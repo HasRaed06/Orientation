@@ -32,18 +32,18 @@
         <h2>تصفية النتائج</h2>
         <div class="filters-grid">
           <label class="field">
-            <span>القطاع / العنوان الرئيسي</span>
+            <span>القطاع</span>
             <select id="categoryFilter">
               <option value="">كل القطاعات</option>
             </select>
           </label>
 
           <label class="field">
-            <span>مجموع آخر موجه 2025</span>
-            <select id="scoreMode">
-              <option value="">بدون تصفية بالمجموع</option>
-              <option value="gte">أكبر من أو يساوي</option>
-              <option value="lte">أصغر من أو يساوي</option>
+            <span>ترتيب حسب مجموع</span>
+            <select id="sortOrder">
+              <option value="">بدون ترتيب</option>
+              <option value="asc">تصاعدي (من الأصغر إلى الأكبر)</option>
+              <option value="desc">تنازلي (من الأكبر إلى الأصغر)</option>
             </select>
           </label>
 
@@ -60,11 +60,10 @@
           </label>
 
           <label class="field">
-            <span>ترتيب حسب مجموع آخر موجه 2025</span>
-            <select id="sortOrder">
-              <option value="">بدون ترتيب</option>
-              <option value="asc">تصاعدي (من الأصغر إلى الأكبر)</option>
-              <option value="desc">تنازلي (من الأكبر إلى الأصغر)</option>
+            <span></span>
+            <select id="scoreMode">
+              <option value="lte" selected>أصغر من أو يساوي</option>
+              <option value="gte">أكبر من أو يساوي</option>
             </select>
           </label>
 

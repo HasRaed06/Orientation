@@ -180,7 +180,7 @@ function render() {
 
 function resetFilters() {
   els.categoryFilter.value = "";
-  els.scoreMode.value = "";
+  els.scoreMode.value = "lte";
   els.scoreValue.value = "";
   els.sortOrder.value = "";
   els.searchInput.value = "";
