@@ -31,8 +31,8 @@ body {
 }
 
 .header {
-  padding: 2.5rem 0 2rem;
-  padding-top: calc(env(safe-area-inset-top) + 2.5rem);
+  padding: 2rem 0 1.5rem;
+  padding-top: calc(env(safe-area-inset-top) + 2rem);
 }
 
 .container {
@@ -105,14 +105,14 @@ h2 {
 }
 
 .filters {
-  padding: 1.25rem;
-  margin-bottom: 1.5rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .filters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
 }
 
 .field {
@@ -135,7 +135,7 @@ select {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 0.7rem 0.85rem;
+  padding: 0.6rem 0.75rem;
   font: inherit;
   background: #fff;
 }
@@ -189,9 +189,9 @@ select:focus {
 
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1rem;
-  padding-bottom: 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.85rem;
+  padding-bottom: 2rem;
 }
 
 .orientation-card {
@@ -338,10 +338,12 @@ code {
 .btn-back {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   background: var(--surface);
   color: var(--accent);
   font-weight: 600;
   border: 1px solid var(--border);
+  text-decoration: none;
 }
 
 .btn-back:hover {
@@ -382,8 +384,65 @@ code {
 }
 
 @media (max-width: 640px) {
+  .header {
+    padding: 1.25rem 0 1rem;
+    padding-top: calc(env(safe-area-inset-top) + 1.25rem);
+  }
+
   .header-inner,
   .results-header {
     flex-direction: column;
+  }
+
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .eyebrow {
+    font-size: 0.85rem;
+  }
+
+  .subtitle {
+    font-size: 0.82rem;
+  }
+
+  .filters {
+    padding: 0.7rem;
+  }
+
+  .filter-actions {
+    flex-direction: column;
+  }
+
+  .filter-actions .btn {
+    text-align: center;
+    width: 100%;
+  }
+
+  .results-grid {
+    gap: 0.65rem;
+  }
+
+  .orientation-card {
+    padding: 0.7rem;
+    gap: 0.45rem;
+  }
+
+  .field span {
+    font-size: 0.82rem;
+  }
+
+  input,
+  select {
+    padding: 0.5rem 0.65rem;
+  }
+
+  .filters-grid {
+    gap: 0.5rem;
+  }
+
+  .stats .stat {
+    padding: 0.6rem 0.75rem;
+    min-width: 80px;
   }
 }
